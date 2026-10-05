@@ -1,11 +1,13 @@
 from flask import Flask
 from app.routes.user import user_bp
-
-def create_app(config=None):
+from app.config import Config
+def create_app():
     app = Flask(__name__)
 
-    if config:
-        app.config.from_mapping(config)
+    
+    app.config.from_object(Config)
+
+    print(app.config["SECRET_KEY"])
 
     app.register_blueprint(user_bp)
 
