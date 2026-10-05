@@ -1,10 +1,21 @@
 from flask import Blueprint,request,make_response
+from app.models.user import User
+from app.extensions import db 
 
 user_bp = Blueprint("users",__name__,url_prefix = "/users")
 
 
 @user_bp.route("",methods = ["POST"])
 def create_user():
+    user = User(
+    id = 12,
+    name="Mahfuj",
+    email="mahfuj@example.com"
+    )
+
+    db.session.add(user)
+    db.session.commit()
+
     
     # value = 5/0
     # raise UserAlreadyExists("User alrady exists")
