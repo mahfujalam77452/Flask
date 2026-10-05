@@ -14,7 +14,17 @@ def health():
 
 @app.route("/users",methods = ["POST"])
 def create_user():
-    return "User created"
+    data = request.get_json()
+
+    if not data:
+        return {
+            "errors":"request data is required"
+        },400
+    return {
+        "name":data.get("name"),
+        "email":data.get("email"),
+        "age":data["age"]
+    },201
 
 @app.route("/users/<id>")
 def get_user(id):
@@ -37,3 +47,18 @@ def get_products():
       "min-price" :mn_price
     }
 
+@app.route("/admin",methods=["POST"])
+def create_admin():
+    name = request.form.get("name")
+    email = request.form.get("email")
+    file = request.files.get("file")
+    file.save("uploads/"+file.filename)
+    return {
+        "email":email,
+        "name":name,
+        "file":file.filename,
+        "method":request.method,
+        "url":request.url,
+        "path":request.path,
+        "base_url":request.base_url
+    }
