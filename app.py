@@ -1,4 +1,4 @@
-from flask import Flask,request,url_for
+from flask import Flask,request,url_for,jsonify,make_response
 
 app = Flask(__name__)
 
@@ -20,11 +20,17 @@ def create_user():
         return {
             "errors":"request data is required"
         },400
-    return {
-        "name":data.get("name"),
-        "email":data.get("email"),
-        "age":data["age"]
-    },201
+
+    response = make_response(
+        {
+           "name":data.get("name"),
+                  "email":data.get("email"),
+                  "age":data["age"]  
+        },201
+    )
+    response.headers["x-app-version"] = "1.0"
+    response.set_cookie("token","abc123",httponly=True,secure=False,samesite="Lax")
+    return response
 
 @app.route("/users/<id>")
 def get_user(id):
